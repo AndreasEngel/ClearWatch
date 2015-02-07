@@ -1,0 +1,56 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "pebble@cahh.de",
+    "longName": "EngelWatch",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "characterRegex": "[0-9:.,]",
+                "file": "fonts/RobotoCondensed-Regular.ttf",
+                "name": "FONT_ROBOTO_10",
+                "type": "font"
+            },
+            {
+                "characterRegex": "[0-9]",
+                "file": "fonts/RobotoCondensed-Regular.ttf",
+                "name": "FONT_ROBOTO_80",
+                "type": "font"
+            },
+            {
+                "characterRegex": "[0-9]",
+                "file": "fonts/RobotoCondensed-Regular.ttf",
+                "name": "FONT_ROBOTO_30",
+                "type": "font"
+            },
+            {
+                "characterRegex": "[0-9]",
+                "file": "fonts/RobotoCondensed-Regular.ttf",
+                "name": "FONT_ROBOTO_60",
+                "type": "font"
+            },
+            {
+                "characterRegex": "[0-9]",
+                "file": "fonts/RobotoCondensed-Regular.ttf",
+                "name": "FONT_ROBOTO_40",
+                "type": "font"
+            },
+            {
+                "file": "images/EngelWatch.png",
+                "menuIcon": true,
+                "name": "ENGEL_WATCH",
+                "type": "png"
+            }
+        ]
+    },
+    "shortName": "EngelWatch",
+    "uuid": "1b08dfd8-ec54-493b-9891-0b474b331300",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
