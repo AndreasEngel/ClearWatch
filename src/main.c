@@ -137,6 +137,7 @@ static void main_window_load(Window *window) {
   sek_akt();
   min_akt();
   hour_akt();
+	day_akt();
 }
  
 static void main_window_unload(Window *window) {
