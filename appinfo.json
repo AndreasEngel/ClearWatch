@@ -4,7 +4,7 @@
         ""
     ],
     "companyName": "pebble@cahh.de",
-    "longName": "EngelWatch",
+    "longName": "ClearWatch",
     "projectType": "native",
     "resources": {
         "media": [
@@ -46,10 +46,10 @@
             }
         ]
     },
-    "shortName": "EngelWatch",
+    "shortName": "ClearWatch",
     "uuid": "1b08dfd8-ec54-493b-9891-0b474b331300",
     "versionCode": 1,
-    "versionLabel": "1.0",
+    "versionLabel": "1.01",
     "watchapp": {
         "watchface": true
     }

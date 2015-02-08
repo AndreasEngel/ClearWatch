@@ -31,9 +31,15 @@ static void hour_akt() {
   time_t temp = time(NULL);
   struct tm *tick_time = localtime(&temp);
   static char buffers[] = "00";
+  strftime(buffers, sizeof("00"), "%H", tick_time);
+  text_layer_set_text(s_hour_layer, buffers);
+}
+ 
+static void day_akt() {
+  time_t temp = time(NULL);
+  struct tm *tick_time = localtime(&temp);
   static char buffert[] = "Mo, 01.";
   static char wt[]="1";
-  strftime(buffers, sizeof("00"), "%H", tick_time);
   strftime(wt, sizeof("1"), "%u", tick_time);
   if (strcmp("1",wt)==0) strftime(buffert, sizeof("Mo. 03."), "Mo. %d.", tick_time);
   if (strcmp("2",wt)==0) strftime(buffert, sizeof("Mo. 03."), "Di. %d.", tick_time);
@@ -42,10 +48,10 @@ static void hour_akt() {
   if (strcmp("5",wt)==0) strftime(buffert, sizeof("Mo. 03."), "Fr. %d.", tick_time);
   if (strcmp("6",wt)==0) strftime(buffert, sizeof("Mo. 03."), "Sa. %d.", tick_time);
   if (strcmp("7",wt)==0) strftime(buffert, sizeof("Mo. 03."), "So. %d.", tick_time);   
-  text_layer_set_text(s_hour_layer, buffers);
   text_layer_set_text(s_tag_layer, buffert);
 }
- 
+
+
 static void bt_handler(bool connected) {
   // Show current connection state
   if (connected) {
@@ -156,6 +162,9 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
     if (units_changed & HOUR_UNIT) {
         hour_akt();
     }
+	if (units_changed & DAY_UNIT) {
+        day_akt();
+    }
 }
    
 static void init() {
@@ -174,7 +183,7 @@ static void init() {
   window_stack_push(s_main_window, true);
    
   // Register with TickTimerService
-  tick_timer_service_subscribe(HOUR_UNIT|MINUTE_UNIT|SECOND_UNIT, tick_handler);
+  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
   // Subscribe to Bluetooth updates
   bluetooth_connection_service_subscribe(bt_handler);
   battery_state_service_subscribe(batt_handler);
