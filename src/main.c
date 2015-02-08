@@ -51,7 +51,6 @@ static void day_akt() {
   text_layer_set_text(s_tag_layer, buffert);
 }
 
-
 static void bt_handler(bool connected) {
   // Show current connection state
   if (connected) {
@@ -70,13 +69,15 @@ static void batt_handler(BatteryChargeState charge_state) {
     }
     text_layer_set_text(s_batt_layer, battery_text);
 }
- 
- 
+  
 static void main_window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   window_set_background_color (window,GColorBlack); 
-  //Beginn Bluetooth
-	// Create output TextLayer
+	
+  FONT_ROBOTO_40=fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_40));
+	FONT_ROBOTO_80=fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_80));
+	FONT_ROBOTO_30=fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_30));
+
   s_blutooth_layer = text_layer_create(GRect(0,-5,20,18));
   text_layer_set_text_alignment(s_blutooth_layer, GTextAlignmentLeft);
   text_layer_set_font(s_blutooth_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
@@ -84,28 +85,16 @@ static void main_window_load(Window *window) {
   text_layer_set_text_color(s_blutooth_layer, GColorClear);
   layer_add_child(window_layer, text_layer_get_layer(s_blutooth_layer));
  
-  // Show current connection state
-  bt_handler(bluetooth_connection_service_peek()); 
-	//Ende Bluetooth
-	//Beginn Batterie
-
 	s_batt_layer=text_layer_create(GRect(105,-5,39,18));
 	text_layer_set_font(s_batt_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
 	layer_add_child(window_layer, text_layer_get_layer(s_batt_layer));
 	text_layer_set_text_alignment(s_batt_layer, GTextAlignmentRight);
 	text_layer_set_background_color(s_batt_layer, GColorBlack);
 	text_layer_set_text_color(s_batt_layer, GColorClear);
-	batt_handler(battery_state_service_peek());
-      
-  // Create time TextLayer
-  FONT_ROBOTO_40=fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_40));
-	FONT_ROBOTO_80=fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_80));
-	FONT_ROBOTO_30=fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_30));
-   
+
   s_tag_layer = text_layer_create(GRect(44,-5, 60, 18)); //Start,hoehe,breite 144x168
   text_layer_set_background_color(s_tag_layer, GColorBlack);
   text_layer_set_text_color(s_tag_layer, GColorClear);
-  text_layer_set_text(s_tag_layer, "Thu, 3.");
   text_layer_set_font(s_tag_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   text_layer_set_text_alignment(s_tag_layer, GTextAlignmentCenter);
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_tag_layer));
@@ -113,7 +102,6 @@ static void main_window_load(Window *window) {
   s_hour_layer = text_layer_create(GRect(-1, 14, 40, 49)); //Start,hoehe,breite 144x168
   text_layer_set_background_color(s_hour_layer, GColorBlack);
   text_layer_set_text_color(s_hour_layer, GColorClear);
-  text_layer_set_text(s_hour_layer, "00");
   text_layer_set_font(s_hour_layer, FONT_ROBOTO_40);
   text_layer_set_text_alignment(s_hour_layer, GTextAlignmentLeft);
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_hour_layer));
@@ -121,7 +109,6 @@ static void main_window_load(Window *window) {
   s_minute_layer = text_layer_create(GRect(35, 52, 80, 80)); //Start,hoehe,breite 144x168
   text_layer_set_background_color(s_minute_layer, GColorBlack);
   text_layer_set_text_color(s_minute_layer, GColorClear);
-  text_layer_set_text(s_minute_layer, "00");
   text_layer_set_font(s_minute_layer, FONT_ROBOTO_80);
   text_layer_set_text_alignment(s_minute_layer, GTextAlignmentLeft);
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_minute_layer));
@@ -129,15 +116,16 @@ static void main_window_load(Window *window) {
   s_sekunde_layer = text_layer_create(GRect(113, 138, 30, 30)); //Start,hoehe,breite 144x168
   text_layer_set_background_color(s_sekunde_layer, GColorBlack);
   text_layer_set_text_color(s_sekunde_layer, GColorClear);
-  text_layer_set_text(s_sekunde_layer, "00");
   text_layer_set_font(s_sekunde_layer, FONT_ROBOTO_30);
   text_layer_set_text_alignment(s_sekunde_layer, GTextAlignmentLeft);
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_sekunde_layer));
-  // Make sure the time is displayed from the start
+
   sek_akt();
   min_akt();
   hour_akt();
 	day_akt();
+	batt_handler(battery_state_service_peek());
+	bt_handler(bluetooth_connection_service_peek()); 
 }
  
 static void main_window_unload(Window *window) {
@@ -150,22 +138,19 @@ static void main_window_unload(Window *window) {
 	text_layer_destroy(s_batt_layer);     
 }
  
- 
- 
- 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
-    if (units_changed & SECOND_UNIT) {
-        sek_akt();
-    }
-    if (units_changed & MINUTE_UNIT) {
-        min_akt();
-    }
-    if (units_changed & HOUR_UNIT) {
-        hour_akt();
-    }
+	if (units_changed & SECOND_UNIT) {
+		sek_akt();
+	}
+	if (units_changed & MINUTE_UNIT) {
+		min_akt();
+	}
+	if (units_changed & HOUR_UNIT) {
+		hour_akt();
+	}
 	if (units_changed & DAY_UNIT) {
-        day_akt();
-    }
+    day_akt();
+  }
 }
    
 static void init() {
@@ -178,14 +163,8 @@ static void init() {
     .load = main_window_load,
     .unload = main_window_unload
   });
- 
- 
-  // Show the Window on the watch, with animated=true
   window_stack_push(s_main_window, true);
-   
-  // Register with TickTimerService
   tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
-  // Subscribe to Bluetooth updates
   bluetooth_connection_service_subscribe(bt_handler);
   battery_state_service_subscribe(batt_handler);
 }
